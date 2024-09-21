@@ -1,0 +1,26 @@
+# Copyright (c) 2022 ZMK Contributors
+# SPDX-License-Identifier: MIT
+ 
+if SHIELD_TPS36_RIGHT
+
+config ZMK_KEYBOARD_NAME
+	default "TPS36"
+
+config ZMK_SPLIT_BLE_ROLE_CENTRAL
+	default y
+
+endif
+
+# if SHIELD_TPS36_LEFT
+
+# config ZMK_KEYBOARD_NAME
+	# default "TPS36 Left"
+
+# endif
+
+if SHIELD_TPS36_LEFT || SHIELD_TPS36_RIGHT
+
+config ZMK_SPLIT
+	default y
+	
+endif
