@@ -31,7 +31,7 @@
                 &kp Q            &kp W            &kp E            &kp R            &kp T              &kp Y            &kp U            &kp I            &kp O            &kp P
                 &mt LGUI A       &mt LALT S       &mt LCTRL D      &mt LSHFT F      &kp G              &kp H            &mt RSHFT J      &mt RCTRL K      &mt RALT L       &mt RGUI SEMI
                 &lt NPAD Z       &kp X            &kp C            &kp V            &kp B              &kp N            &kp M            &kp COMMA        &kp DOT          &kp FSLH
-                                                  &mo NUMS         &lt FUNC SPACE   &lt DCTL TAB       &lt DCTL BKSP    &kp ENTER        &kp none
+                                                  &mo NUMS         &lt FUNC SPACE   &lt DCTL TAB       &lt DCTL BKSP    &kp ENTER        &none
             >;
         };
 
@@ -40,7 +40,7 @@
                 &kp PSCRN        &kp LEFT         &kp DOWN         &kp UP           &kp RIGHT          &kp BSLH         &kp N7           &kp N8           &kp N9           &kp N0
                 &caps_word       &mkp LCLK        &mo FUNC         &mkp RCLK        &mkp MCLK          &kp GRAVE        &kp N4           &kp N5           &kp N6           &kp APOS
                 &kp LSFT         &kp LBKT         &kp RBKT         &kp K_APP        &kp CAPS           &kp MINUS        &kp N1           &kp N2           &kp N3           &kp EQUAL
-                                                  &trans           &trans           &trans             &kp RGUI         &kp ESC          &kp none
+                                                  &trans           &trans           &trans             &kp RGUI         &kp ESC          &none
             >;
         };
          
@@ -49,7 +49,7 @@
                 &kp F1           &kp F2           &kp F3           &kp F4           &kp F5             &kp F6           &kp F7           &kp F8           &kp F9           &kp F12
                 &kp C_BRI_UP     &kp C_VOL_UP     &kp C_NEXT       &kp C_PLAY       &kp SLCK           &kp LEFT         &kp DOWN         &kp UP           &kp RIGHT        &kp F10
                 &kp C_BRI_DN     &kp C_VOL_DN     &kp C_PREV       &kp C_PAUSE      &kp PAUSE_BREAK    &kp INS          &kp DEL          &kp PG_UP        &kp PG_DN        &kp F11
-                                                  &trans           &trans           &trans             &kp HOME         &kp END          &kp none
+                                                  &trans           &trans           &trans             &kp HOME         &kp END          &none
             >;
         };
 
@@ -58,7 +58,7 @@
                 &kp KP_NLCK      &kp KP_CLEAR     &kp KP_ENTER     &kp KP_EQUAL     &kp KP_COMMA       &kp KP_DOT       &kp KP_N7        &kp KP_N8        &kp KP_N9        &kp KP_N0
                 &mkp MB4         &mkp LCLK        &mkp MB5         &mkp RCLK        &mkp MCLK          &kp KP_MULTIPLY  &kp KP_N4        &kp KP_N5        &kp KP_N6        &kp KP_DIVIDE
                 &kp C_BRI_AUTO   &kp C_MUTE       &kp C_PP         &kp C_PLAY_PAUSE &kp C_RW           &kp KP_MINUS     &kp KP_N1        &kp KP_N2        &kp KP_N3        &kp KP_PLUS
-                                                  &trans           &trans           &trans             &kp KP_LPAR      &kp KP_RPAR      &kp none
+                                                  &trans           &trans           &trans             &kp KP_LPAR      &kp KP_RPAR      &none
             >;
         };
          
@@ -67,7 +67,7 @@
                 &bootloader      &sys_reset       &none            &none            &none              &none            &none            &bt BT_CLR_ALL   &sys_reset       &bootloader
                 &bt BT_SEL 0     &bt BT_SEL 1     &bt BT_SEL 2     &bt BT_SEL 3     &bt BT_SEL 4       &bt BT_PRV       &bt BT_NXT       &bt BT_CLR       &out OUT_USB     &out OUT_BLE
                 &none            &none            &none            &none            &none              &none            &none            &none            &none            &none 
-                                                  &none            &none            &none              &none            &none            &kp none
+                                                  &none            &none            &none              &none            &none            &none
             >;
         };
    	};
