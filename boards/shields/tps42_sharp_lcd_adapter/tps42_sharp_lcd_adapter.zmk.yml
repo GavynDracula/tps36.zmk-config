@@ -1,0 +1,7 @@
+file_format: "1"
+id: tps42_sharp_lcd_adapter
+name: SHARP LCD adapter for TPS42
+type: shield
+url: https://nicekeyboards.com/nice-view, https://github.com/crehmann/TPS42/tree/main/PCB/TPS42-LCD-Shield
+requires: [i2c_oled]
+exposes: [nice_view_header]

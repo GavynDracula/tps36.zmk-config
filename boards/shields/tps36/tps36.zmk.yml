@@ -9,5 +9,5 @@ features:
   - keys
   - display
 siblings:
-  - tps36_left
-  - tps36_right
+  - tps36_left tps42_sharp_lcd_adapter nice_view_flipped
+  - tps36_right tps42_sharp_lcd_adapter nice_view_flipped

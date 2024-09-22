@@ -1,0 +1,5 @@
+# Copyright (c) 2022 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+config SHIELD_TPS42_SHARP_LCD_ADAPTER
+    def_bool $(shields_list_contains,tps42_sharp_lcd_adapter)
