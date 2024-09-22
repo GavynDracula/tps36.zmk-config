@@ -1,0 +1,13 @@
+file_format: "1"
+id: tps36
+name: TPS36
+type: shield
+url: https://github.com/crehmann/TPS42
+requires: [pro_micro]
+exposes: [i2c_oled]
+features:
+  - keys
+  - display
+siblings:
+  - tps36_left
+  - tps36_right
