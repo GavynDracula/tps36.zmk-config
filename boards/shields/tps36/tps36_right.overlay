@@ -30,7 +30,7 @@
 #define MOUSE_PS2_PIN_SDA_PINCTRL <NRF_PSEL(UART_RX, 1, 0)>
 
 // Configure the Power-On-Reset pin
-// TPS42 uses resistors and capacitors to implement the functionality
+// TPS36 uses resistors and capacitors to implement the functionality
 // #define MOUSE_PS2_PIN_RST_PRO_MICRO <&pro_micro 9 GPIO_ACTIVE_HIGH>
 
 // Configure UART BAUD Rate

@@ -14,8 +14,8 @@
 ---
 include:
   - board: nice_nano_v2
-    shield: tps36_left
+    shield: tps36_left tps42_sharp_lcd_adapter nice_view_flipped
   - board: nice_nano_v2
-    shield: tps36_right
+    shield: tps36_right tps42_sharp_lcd_adapter nice_view_flipped
   - board: nice_nano_v2
     shield: settings_reset
