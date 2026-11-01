@@ -32,7 +32,7 @@ manifest:
     #   - On-device RawAccel-style power curve
     #   - Anti-glitch filters (median / slew / EMA)
     #   - Speed divisor with remainder accumulation
-    - name: zmk_ps2_trackpoint_driver
+    - name: zmk-ps2-trackpoint-driver
       remote: Magid-William
       revision: main
 
