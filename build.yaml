@@ -17,7 +17,5 @@ include:
     shield: tps36_left tps42_sharp_lcd_adapter nice_view_flipped
   - board: nice_nano@2.0.0//zmk
     shield: tps36_right tps42_sharp_lcd_adapter nice_view_flipped
-    # USB CDC ACM logging, so the trackpoint driver can be watched live.
-    snippet: zmk-usb-logging
   - board: nice_nano@2.0.0//zmk
     shield: settings_reset
