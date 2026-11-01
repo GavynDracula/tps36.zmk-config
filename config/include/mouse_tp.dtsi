@@ -2,6 +2,7 @@
   #include <dt-bindings/zmk/mouse.h>
   #include <dt-bindings/zmk/mouse_settings.h>
   #include <dt-bindings/zmk/input_transform.h>
+  #include <input/processors.dtsi>
   #include <behaviors/mouse_keys.dtsi>
   #include <behaviors/mouse_setting.dtsi>
 
@@ -91,31 +92,19 @@
       // adjust it in their firmware. Check the driver options below for
       // more info.
       //
-      // The two scalers are applied after the transform, so they scale the
-      // axes the host actually sees. Each one is a ratio of
-      // (multiplier, divisor) and keeps the fractional remainder, so a ratio
-      // like 3/4 slows the axis down to 75% without quantising the motion.
+      // The two scalers run after the transform, so they scale the axes the
+      // host actually sees. Each takes a (multiplier, divisor) pair and
+      // keeps the fractional remainder across packets, so a ratio like 3/4
+      // slows an axis down to 75% without quantising the motion.
       //
       // The trackpoint's sensor is rarely perfectly balanced, so the
       // vertical axis often feels more sensitive than the horizontal one.
       // Measure the ratio you need and bake it in here: if the pointer moves
       // `v` pixels vertically for the same physical push that moves it `h`
       // pixels horizontally, use (h/v) as the vertical ratio.
-      input-processors = <&tp_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>,
-                         <&tp_scaler_x (1 1)>,
-                         <&tp_scaler_y (1 1)>;
-    };
-
-    &tp_xy_transform {
-      status = "okay";
-    };
-
-    &tp_scaler_x {
-      status = "okay";
-    };
-
-    &tp_scaler_y {
-      status = "okay";
+      input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>,
+                         <&zip_x_scaler 1 1>,
+                         <&zip_y_scaler 1 1>;
     };
 
 
