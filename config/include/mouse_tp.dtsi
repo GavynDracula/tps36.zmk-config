@@ -173,12 +173,13 @@
       // connection errors.
       //
       // 200 halves the input latency (5 ms instead of 10 ms per packet) at
-      // the cost of a higher error rate - the median filter in
-      // boards/shields/tps36/tps36_right.conf takes care of the resulting
-      // spikes. Set it back to 100 if the pointer starts to feel spiky.
+      // the cost of a higher error rate, and it also doubles the rate of
+      // mouse reports, which the BLE connection interval may not be able to
+      // carry. Start at 100 and raise it once the link is verified.
       //
       // These values are allowed: 10,20,40,60,80,100,200
-      sampling-rate = <200>;
+      // sampling-rate = <200>;
+      sampling-rate = <100>;
 
 
       // Disables clicking.
