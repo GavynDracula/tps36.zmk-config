@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
  
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+
 #include "tps36.dtsi"
 
 &default_transform {
@@ -311,13 +313,39 @@
 #endif
     };
 
-    mouse_ps2_input_listener: mouse_ps2_input_listener {
-        compatible = "zmk,input-listener-ps2";
+    // Upstream ZMK pointing device listener. The PS/2 driver registers as a
+    // standard Zephyr input device, so it plugs straight into the mainline
+    // `zmk,input-listener` framework and the mainline input processors.
+    mouse_ps2_listener: mouse_ps2_listener {
+        compatible = "zmk,input-listener";
         status = "disabled";
 
         device = <&mouse_ps2>;
 
-		// Some of the available settings depend on the keymap. So they
-		// are adjusted in  zmk-config/config/includes/mouse_tp.dtsi
+		// The input processors are attached in
+		// zmk-config/config/include/mouse_tp.dtsi, because some of the
+		// settings depend on the keymap.
+    };
+
+    // Transform processor: swaps and inverts the pointing device axes.
+    // Used to adapt the trackpoint to the physical orientation of the TPS36.
+    tp_xy_transform: tp_xy_transform {
+        compatible = "zmk,input-processor-transform";
+        status = "disabled";
+
+        type = <INPUT_EV_REL>;
+        x-codes = <INPUT_REL_X>;
+        y-codes = <INPUT_REL_Y>;
+    };
+
+    // Scaler processor: rescales the movement deltas while accumulating the
+    // fractional remainder across packets, so sub-pixel motion is preserved
+    // instead of being truncated away.
+    tp_scaler: tp_scaler {
+        compatible = "zmk,input-processor-scaler";
+        status = "disabled";
+
+        type = <INPUT_EV_REL>;
+        codes = <INPUT_REL_X INPUT_REL_Y>;
     };
 };
