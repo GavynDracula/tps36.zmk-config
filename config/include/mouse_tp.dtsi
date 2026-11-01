@@ -90,15 +90,31 @@
       // values inside the zmk driver. Some trackpoints also allow you to
       // adjust it in their firmware. Check the driver options below for
       // more info.
+      //
+      // The two scalers are applied after the transform, so they scale the
+      // axes the host actually sees. Each one is a ratio of
+      // (multiplier, divisor) and keeps the fractional remainder, so a ratio
+      // like 3/4 slows the axis down to 75% without quantising the motion.
+      //
+      // The trackpoint's sensor is rarely perfectly balanced, so the
+      // vertical axis often feels more sensitive than the horizontal one.
+      // Measure the ratio you need and bake it in here: if the pointer moves
+      // `v` pixels vertically for the same physical push that moves it `h`
+      // pixels horizontally, use (h/v) as the vertical ratio.
       input-processors = <&tp_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>,
-                         <&tp_scaler (1 1)>;
+                         <&tp_scaler_x (1 1)>,
+                         <&tp_scaler_y (1 1)>;
     };
 
     &tp_xy_transform {
       status = "okay";
     };
 
-    &tp_scaler {
+    &tp_scaler_x {
+      status = "okay";
+    };
+
+    &tp_scaler_y {
       status = "okay";
     };
 

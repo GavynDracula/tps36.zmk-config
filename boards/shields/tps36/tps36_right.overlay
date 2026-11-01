@@ -338,14 +338,37 @@
         y-codes = <INPUT_REL_Y>;
     };
 
-    // Scaler processor: rescales the movement deltas while accumulating the
+    // Scaler processors: rescale the movement deltas while accumulating the
     // fractional remainder across packets, so sub-pixel motion is preserved
     // instead of being truncated away.
-    tp_scaler: tp_scaler {
+    //
+    // There is one instance per axis on purpose: the ratio is applied to the
+    // codes listed in `codes`, and the remainder is tracked per axis, so a
+    // single instance covering both axes would apply one ratio to both and
+    // share its remainder between them.
+    //
+    // This is what lets the horizontal and vertical sensitivity be tuned
+    // independently - the trackpoint sensor is rarely perfectly balanced
+    // across its two axes.
+    tp_scaler_x: tp_scaler_x {
         compatible = "zmk,input-processor-scaler";
         status = "disabled";
 
         type = <INPUT_EV_REL>;
-        codes = <INPUT_REL_X INPUT_REL_Y>;
+        codes = <INPUT_REL_X>;
+
+        // Keep the fractional remainder across packets.
+        track-remainders;
+    };
+
+    tp_scaler_y: tp_scaler_y {
+        compatible = "zmk,input-processor-scaler";
+        status = "disabled";
+
+        type = <INPUT_EV_REL>;
+        codes = <INPUT_REL_Y>;
+
+        // Keep the fractional remainder across packets.
+        track-remainders;
     };
 };
