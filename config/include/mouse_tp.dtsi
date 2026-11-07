@@ -118,17 +118,20 @@
       // instead of a pointer.
       //
       // An override that matches the active layer replaces the base
-      // processors, so the chain is repeated here - the transform has to be
-      // in it too, otherwise the scroll axes would be the wrong way around.
+      // processors, so the chain is repeated here.
+      //
+      // Only the axis swap, without the inversion: the pointer path needs
+      // the inversion because the host applies its own direction to the
+      // wheel, so leaving it out makes pushing the trackpoint down scroll
+      // down and pushing it left scroll left.
       //
       // The scaler divides the movement down to a sensible number of wheel
-      // detents per packet; 1/4 feels about right, try 1/8 or 1/16 if it
-      // scrolls too fast.
+      // detents per packet.
       scroller {
           layers = <2>; // FUNC
 
-          input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>,
-                             <&zip_xy_scaler 1 4>,
+          input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP)>,
+                             <&zip_xy_scaler 1 8>,
                              <&zip_xy_to_scroll_mapper>;
       };
     };
@@ -141,7 +144,12 @@
     &mouse_ps2 {
 
       // How sensitive the TP is (Default: 128)
-      // tp-sensitivity = <128>;
+      //
+      // Set here so the trackpoint starts out at the preferred sensitivity.
+      // Note that this value is applied at boot, so it also overwrites
+      // whatever the &mms key behaviors have stored in the flash - the
+      // runtime adjustment still works, but it is reset on every reboot.
+      tp-sensitivity = <180>;
 
 
       // The maximum mouse movement speed the TP will accelarate to
