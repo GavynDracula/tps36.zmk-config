@@ -113,6 +113,24 @@
       input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>,
                          <&zip_x_scaler 1 1>,
                          <&zip_y_scaler 1 2>;
+
+      // On the function layer the trackpoint turns into a scroll wheel
+      // instead of a pointer.
+      //
+      // An override that matches the active layer replaces the base
+      // processors, so the chain is repeated here - the transform has to be
+      // in it too, otherwise the scroll axes would be the wrong way around.
+      //
+      // The scaler divides the movement down to a sensible number of wheel
+      // detents per packet; 1/4 feels about right, try 1/8 or 1/16 if it
+      // scrolls too fast.
+      scroller {
+          layers = <2>; // FUNC
+
+          input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>,
+                             <&zip_xy_scaler 1 4>,
+                             <&zip_xy_to_scroll_mapper>;
+      };
     };
 
 
@@ -161,13 +179,11 @@
       // connection errors.
       //
       // 200 halves the input latency (5 ms instead of 10 ms per packet) at
-      // the cost of a higher error rate, and it also doubles the rate of
-      // mouse reports, which the BLE connection interval may not be able to
-      // carry. Start at 100 and raise it once the link is verified.
+      // the cost of a higher error rate and a higher mouse report rate,
+      // which the BLE connection interval may not be able to carry.
       //
       // These values are allowed: 10,20,40,60,80,100,200
-      // sampling-rate = <200>;
-      sampling-rate = <100>;
+      sampling-rate = <200>;
 
 
       // Disables clicking.
