@@ -13,9 +13,9 @@
 #
 ---
 include:
-  - board: nice_nano_v2
+  - board: nice_nano@2.0.0//zmk
     shield: tps36_left tps42_sharp_lcd_adapter nice_view_flipped
-  - board: nice_nano_v2
+  - board: nice_nano@2.0.0//zmk
     shield: tps36_right tps42_sharp_lcd_adapter nice_view_flipped
-  - board: nice_nano_v2
+  - board: nice_nano@2.0.0//zmk
     shield: settings_reset

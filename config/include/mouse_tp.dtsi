@@ -1,6 +1,8 @@
 #ifdef HAS_MOUSE_TP
   #include <dt-bindings/zmk/mouse.h>
   #include <dt-bindings/zmk/mouse_settings.h>
+  #include <dt-bindings/zmk/input_transform.h>
+  #include <input/processors.dtsi>
   #include <behaviors/mouse_keys.dtsi>
   #include <behaviors/mouse_setting.dtsi>
 
@@ -72,29 +74,73 @@
 
    /*
     * Input Listener Config
+    *
+    * The PS/2 driver registers itself as a plain Zephyr input device, so it
+    * plugs into the upstream ZMK pointing device framework: the mainline
+    * `zmk,input-listener` turns the device's events into HID mouse reports
+    * and passes them through the input processors listed below.
     */
 
-    &mouse_ps2_input_listener {
+    &mouse_ps2_listener {
+
+      status = "okay";
 
       // Adjust pointing device axes.
-      // This adjusts the values inside the zmk driver. Some
-      // trackpoints also allow you to adjust it in their firmware. Check
-      // the driver options below for more info.
-      xy-swap;
-      x-invert;
-      y-invert;
+      // The transform processor swaps and inverts the axes so the trackpoint
+      // matches the physical orientation of the TPS36. This adjusts the
+      // values inside the zmk driver. Some trackpoints also allow you to
+      // adjust it in their firmware. Check the driver options below for
+      // more info.
+      //
+      // The two scalers run after the transform, so they scale the axes the
+      // host actually sees. Each takes a (multiplier, divisor) pair and
+      // keeps the fractional remainder across packets, so a ratio like 3/4
+      // slows an axis down to 75% without quantising the motion.
+      //
+      // The trackpoint's sensor is not balanced across its two axes. The
+      // 180 degree rotation above means the screen's vertical axis is driven
+      // by the trackpoint's native X axis, which measures roughly twice the
+      // movement of the native Y axis for the same physical push - so the
+      // vertical axis is scaled down to match the horizontal one.
+      //
+      // Measured from the USB log: 11.55 movement units per packet for the
+      // vertical strokes against 5.95 for the horizontal ones, and 2.55
+      // against 1.06 for the cross axis leakage.
+      //
+      // The overall speed is not adjusted here - it is raised with the
+      // trackpoint's own sensitivity setting (&mms), which affects both
+      // axes at once.
+      input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>,
+                         <&zip_x_scaler 1 1>,
+                         <&zip_y_scaler 1 2>;
 
-      // Set the layer that should automatically activate when the mouse is
-      // moving.
-      // layer-toggle = <NUMS>;
+      // On the function layer the trackpoint turns into a scroll wheel
+      // instead of a pointer.
+      //
+      // An override that matches the active layer replaces the base
+      // processors, so the chain is repeated here.
+      //
+      // The transform processor applies the axis swap first and the
+      // inversion afterwards, so the invert flags end up on the opposite
+      // axis of the one they are named after:
+      //
+      //   trackpoint native X -> REL_Y -> WHEEL  (vertical scroll)
+      //   trackpoint native Y -> REL_X -> HWHEEL (horizontal scroll)
+      //
+      // The host leaves the vertical wheel alone but reverses the
+      // horizontal one, so only the horizontal axis needs the inversion:
+      // X_INVERT applies to the events that end up as REL_X, which are the
+      // ones that become HWHEEL.
+      //
+      // The scaler divides the movement down to a sensible number of wheel
+      // detents per packet.
+      scroller {
+          layers = <2>; // FUNC
 
-      // How long the mouse needs to move for before the layer is activated (to
-      // avoid accidental activations while typing) (Default: 250)
-      // layer-toggle-delay-ms = <250>;
-
-      // How long to wait, after the last mouse movement, before deactivating
-      // the layer (Default: 250)
-      // layer-toggle-timeout-ms = <250>;
+          input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)>,
+                             <&zip_xy_scaler 1 8>,
+                             <&zip_xy_to_scroll_mapper>;
+      };
     };
 
 
@@ -105,6 +151,11 @@
     &mouse_ps2 {
 
       // How sensitive the TP is (Default: 128)
+      //
+      // Left unset on purpose: the driver only applies a value that is
+      // defined here, and when it is defined it also refuses to restore the
+      // value stored in the flash. Leaving it unset means the &mms key
+      // behaviors can adjust it at runtime and the value survives a reboot.
       // tp-sensitivity = <128>;
 
 
@@ -142,11 +193,12 @@
       // The default rate is 100. You can try lowering it if you experience
       // connection errors.
       //
-      // Higher values than 100 are no improvement in my experience, but will
-      // increase battery life and potentially errors in transmissions.
+      // 200 halves the input latency (5 ms instead of 10 ms per packet) at
+      // the cost of a higher error rate and a higher mouse report rate,
+      // which the BLE connection interval may not be able to carry.
       //
       // These values are allowed: 10,20,40,60,80,100,200
-      // sampling-rate = <60>;
+      sampling-rate = <200>;
 
 
       // Disables clicking.
@@ -170,10 +222,6 @@
     // block, which prevents compilation and potential build errors when we
     // undefine HAS_MOUSE_TP in corne_tp.keymap
     &mouse_ps2  {
-      status = "okay";
-    };
-
-    &mouse_ps2_input_listener {
       status = "okay";
     };
 

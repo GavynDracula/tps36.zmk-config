@@ -311,13 +311,17 @@
 #endif
     };
 
-    mouse_ps2_input_listener: mouse_ps2_input_listener {
-        compatible = "zmk,input-listener-ps2";
+    // Upstream ZMK pointing device listener. The PS/2 driver registers as a
+    // standard Zephyr input device, so it plugs straight into the mainline
+    // `zmk,input-listener` framework and the mainline input processors.
+    mouse_ps2_listener: mouse_ps2_listener {
+        compatible = "zmk,input-listener";
         status = "disabled";
 
         device = <&mouse_ps2>;
 
-		// Some of the available settings depend on the keymap. So they
-		// are adjusted in  zmk-config/config/includes/mouse_tp.dtsi
+		// The input processors are attached in
+		// zmk-config/config/include/mouse_tp.dtsi, because some of the
+		// settings depend on the keymap.
     };
 };
