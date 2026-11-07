@@ -107,8 +107,9 @@
       // vertical strokes against 5.95 for the horizontal ones, and 2.55
       // against 1.06 for the cross axis leakage.
       //
-      // The overall speed can be raised afterwards with the trackpoint's own
-      // sensitivity setting (&mms), which affects both axes at once.
+      // The overall speed is not adjusted here - it is raised with the
+      // trackpoint's own sensitivity setting (&mms), which affects both
+      // axes at once.
       input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>,
                          <&zip_x_scaler 1 1>,
                          <&zip_y_scaler 1 2>;
@@ -139,26 +140,6 @@
       // Not all TPs support this.
       tp-press-to-select;
       // tp-press-to-select-threshold = <10>;
-
-
-      // On-device velocity curve, RawAccel "Power" style:
-      //   f(v) = curve-start + (curve-rate * v) ^ curve-exponent
-      // where v is the magnitude of the movement delta of one input packet.
-      //
-      // The trackpoint's own acceleration curve is coarse (8 bit, fixed
-      // shape), so this adds a fine grained curve on top of it, with
-      // fractional remainder accumulation so that sub-pixel motion is
-      // preserved instead of being truncated away.
-      //
-      // Requires CONFIG_ZMK_INPUT_MOUSE_PS2_POWER_CURVE=y.
-      //
-      // curve-rate = 0 (the default) leaves the raw stream untouched.
-      // curve-sens scales the whole curve ("loudness"), curve-start is the
-      // gain at v=0 ("precision" - lower attenuates slow deltas more).
-      curve-sens = <255>;
-      curve-rate = <18>;
-      curve-exponent = <256>;
-      curve-start = <256>;
 
 
       // Adjust axis settings on the TP
