@@ -145,11 +145,11 @@
 
       // How sensitive the TP is (Default: 128)
       //
-      // Set here so the trackpoint starts out at the preferred sensitivity.
-      // Note that this value is applied at boot, so it also overwrites
-      // whatever the &mms key behaviors have stored in the flash - the
-      // runtime adjustment still works, but it is reset on every reboot.
-      tp-sensitivity = <180>;
+      // Left unset on purpose: the driver only applies a value that is
+      // defined here, and when it is defined it also refuses to restore the
+      // value stored in the flash. Leaving it unset means the &mms key
+      // behaviors can adjust it at runtime and the value survives a reboot.
+      // tp-sensitivity = <128>;
 
 
       // The maximum mouse movement speed the TP will accelarate to
