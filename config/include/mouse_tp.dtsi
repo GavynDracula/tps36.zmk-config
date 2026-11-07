@@ -120,17 +120,24 @@
       // An override that matches the active layer replaces the base
       // processors, so the chain is repeated here.
       //
-      // Only the axis swap, without the inversion: the pointer path needs
-      // the inversion because the host applies its own direction to the
-      // wheel, so leaving it out makes pushing the trackpoint down scroll
-      // down and pushing it left scroll left.
+      // The transform processor applies the axis swap first and the
+      // inversion afterwards, so the invert flags end up on the opposite
+      // axis of the one they are named after:
+      //
+      //   trackpoint native X -> REL_Y -> WHEEL  (vertical scroll)
+      //   trackpoint native Y -> REL_X -> HWHEEL (horizontal scroll)
+      //
+      // The host leaves the vertical wheel alone but reverses the
+      // horizontal one, so only the horizontal axis needs the inversion:
+      // X_INVERT applies to the events that end up as REL_X, which are the
+      // ones that become HWHEEL.
       //
       // The scaler divides the movement down to a sensible number of wheel
       // detents per packet.
       scroller {
           layers = <2>; // FUNC
 
-          input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP)>,
+          input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)>,
                              <&zip_xy_scaler 1 8>,
                              <&zip_xy_to_scroll_mapper>;
       };
